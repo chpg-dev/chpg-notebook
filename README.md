@@ -34,3 +34,9 @@ To access the notebook, look at the terminal output after running the docker com
 http://127.0.0.1:8888/lab?token=<your_token>
 ```
 Open this link in your browser to access the JupyterLab environment and test the notebooks.
+
+## Uploading Data
+
+You can upload `.dgb` (Direct Graph Buffer) format files to the `data` directory using the Jupyter Notebook upload button.
+
+Note that DGB files can be exported from Atlas (e.g., the Xinu operating system) using [chpg-atlas](https://github.com/benjholla/chpg-atlas).
