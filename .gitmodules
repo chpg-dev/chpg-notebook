@@ -1,0 +1,6 @@
+[submodule "pg"]
+	path = pg
+	url = git@github.com:benjholla/pg.git
+[submodule "pgv"]
+	path = pgv
+	url = git@github.com:benjholla/pgv.git
