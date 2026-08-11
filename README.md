@@ -9,7 +9,7 @@ Support for Jupyter Notebook
 ## Setup
 Clone the repository with its submodules:
 ```bash
-git clone --recurse-submodules <repository-url>
+git clone --recurse-submodules git@github.com:chpg-dev/chpg-notebook.git
 ```
 If you have already cloned the repository without submodules, you can initialize them with:
 ```bash
