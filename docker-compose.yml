@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  notebook:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8888:8888"
+    volumes:
+      # Mount the root directory to /app so the container can build pg and pgv submodules
+      - .:/app
+      # Explicit mounts for data and notebooks (ensure they persist in local folders)
+      - ./data:/app/data
+      - ./notebooks:/app/notebooks
