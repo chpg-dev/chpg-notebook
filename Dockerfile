@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y \
     curl \
     unzip \
     git \
+    maven \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Node.js (LTS, version 20)
