@@ -1,0 +1,98 @@
+diff --git a/package.json b/package.json
+index 7431a99..a0c74c8 100644
+--- a/package.json
++++ b/package.json
+@@ -62,6 +62,7 @@
+     "typedoc": "^0.28.19",
+     "typescript": "^5.9.3",
+     "vite": "^8.1.4",
++    "vite-plugin-css-injected-by-js": "^5.0.2",
+     "vitest": "^4.1.9"
+   },
+   "dependencies": {
+diff --git a/pnpm-lock.yaml b/pnpm-lock.yaml
+index 0b89646..6705f46 100644
+--- a/pnpm-lock.yaml
++++ b/pnpm-lock.yaml
+@@ -36,6 +36,9 @@ importers:
+       vite:
+         specifier: ^8.1.4
+         version: 8.1.4(@types/node@24.13.3)(yaml@2.9.0)
++      vite-plugin-css-injected-by-js:
++        specifier: ^5.0.2
++        version: 5.0.2(vite@8.1.4(@types/node@24.13.3)(yaml@2.9.0))
+       vitest:
+         specifier: ^4.1.9
+         version: 4.1.9(@types/node@24.13.3)(@vitest/coverage-v8@4.1.9)(jsdom@29.1.1)(vite@8.1.4(@types/node@24.13.3)(yaml@2.9.0))
+@@ -708,6 +711,11 @@ packages:
+     resolution: {integrity: sha512-cRZYrTDwWznlnRiPjggAGxZXanty6M8RV1ff8Wm4LWXBp7/IG8v5DnOm74DtUBp9OONpK75YlPnIjQqX0dBDtA==}
+     engines: {node: '>=20.18.1'}
+
++  vite-plugin-css-injected-by-js@5.0.2:
++    resolution: {integrity: sha512-Hvg48QfYsCL53ju9T5zTC0Ofg90XLa8t5zhhKmPYbayoMQieNcQDkkRX8pv4TAcKPZwVisLFiwDy5uBjOn+3Ow==}
++    peerDependencies:
++      vite: '>8.0.0-0'
++
+   vite@8.1.4:
+     resolution: {integrity: sha512-bTT9PsdWO+MQMNG9ZXIP/qM9wGh37DFxTV/sPq9cFpHr3w4jkgef032PkAL9jAqhk3Nz8NQw3O8n6/xFkqO4QQ==}
+     engines: {node: ^20.19.0 || >=22.12.0}
+@@ -1417,6 +1425,10 @@ snapshots:
+
+   undici@7.28.0: {}
+
++  vite-plugin-css-injected-by-js@5.0.2(vite@8.1.4(@types/node@24.13.3)(yaml@2.9.0)):
++    dependencies:
++      vite: 8.1.4(@types/node@24.13.3)(yaml@2.9.0)
++
+   vite@8.1.4(@types/node@24.13.3)(yaml@2.9.0):
+     dependencies:
+       lightningcss: 1.32.0
+diff --git a/src/main.ts b/src/main.ts
+new file mode 100644
+index 0000000..f94cecc
+--- /dev/null
++++ b/src/main.ts
+@@ -0,0 +1,14 @@
++import { GraphView, createGraphSnapshot } from "./index";
++import "./style.css"; // Only keep the core CSS
++
++(window as any).renderPgvNotebook = function(containerId: string, graphJson: any) {
++    const container = document.getElementById(containerId);
++    if (!container) return;
++    const snapshot = createGraphSnapshot(graphJson);
++    const view = new GraphView(container, graphJson.schema || {}, {
++        layoutOptions: { nodeWidth: 240, nodeHeight: 94, layerSpacing: 152, nodeSpacing: 290, margin: 36 },
++        usePanZoom: true,
++        useThemeToggle: true
++    });
++    view.setGraph(snapshot);
++};
+diff --git a/vite.config.ts b/vite.config.ts
+index 05c1923..bd3d7af 100644
+--- a/vite.config.ts
++++ b/vite.config.ts
+@@ -1,13 +1,20 @@
+ import { resolve } from "node:path";
+ import { defineConfig } from "vite";
++import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
+
+ export default defineConfig({
++  root: resolve(__dirname),
++  plugins: [ cssInjectedByJsPlugin() ],
+   build: {
++    outDir: resolve(__dirname, "dist"),
++    emptyOutDir: true,
+     lib: {
+-      entry: resolve(__dirname, "src/index.ts"),
+-      formats: ["es"],
+-      fileName: "index",
++      entry: resolve(__dirname, "src/main.ts"),
++      name: "pgv",
++      formats: ["iife"],
++      fileName: () => "pgv-bundle.js"
+     },
+-    sourcemap: true,
++    rollupOptions: { external: [] }
+   },
++  server: { open: false }
+ });
