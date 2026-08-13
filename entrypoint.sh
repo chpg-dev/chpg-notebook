@@ -13,8 +13,8 @@ fi
 echo "Building pgv..."
 if [ -f "/app/pgv/package.json" ]; then
     cd /app/pgv
-    pnpm install
-    pnpm build
+    CI=true pnpm install
+    CI=true pnpm vite build --config jupyter-notebook.config.ts
     cd /app
 else
     echo "Warning: /app/pgv/package.json not found. Did you initialize the submodules correctly?"
