@@ -20,5 +20,12 @@ else
     echo "Warning: /app/pgv/package.json not found. Did you initialize the submodules correctly?"
 fi
 
+echo "Building pgv-exporter..."
+if [ -f "/app/pgv/examples/pgv-exporter/pom.xml" ]; then
+    cd /app/pgv/examples/pgv-exporter
+    mvn package -DskipTests
+    cd /app
+fi
+
 echo "Starting JupyterLab..."
 exec jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root
