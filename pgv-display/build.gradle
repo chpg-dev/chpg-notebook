@@ -12,7 +12,7 @@ repositories {
 sourceSets {
     main {
         java {
-            srcDirs = ['src/main/java', 'src/stub/java']
+            srcDirs = ['src/main/java']
         }
     }
 }
@@ -34,9 +34,4 @@ java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
     }
-}
-
-// Exclude stub classes from the final jar since they are provided by the notebook natively at runtime
-jar {
-    exclude 'io/github/spencerpark/ijava/runtime/**'
 }
