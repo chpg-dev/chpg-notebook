@@ -7,6 +7,10 @@
 # BlueJ files
 *.ctxt
 
+# Eclipse project files
+*.project
+*.settings
+
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
@@ -23,6 +27,9 @@
 hs_err_pid*
 replay_pid*
 
+# notebook artifacts
 data/
 .ipynb_checkpoints
+
+# build artifacts
 .pnpm-store
