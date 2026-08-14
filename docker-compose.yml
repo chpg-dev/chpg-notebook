@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: Dockerfile
     environment:
-      - IJAVA_CLASSPATH=/app/pg/pg-api/build/libs/*:/app/pg/pg-global/build/libs/*:/app/pg/pg-multiverse/build/libs/*:/app/pg/pg-io/build/libs/*:/app/pgv/examples/pgv-exporter/target/*:/app/pgv-display/build/libs*
+      - IJAVA_CLASSPATH=/app/pg/pg-api/build/libs/*:/app/pg/pg-global/build/libs/*:/app/pg/pg-multiverse/build/libs/*:/app/pg/pg-io/build/libs/*:/app/pgv/examples/pgv-exporter/target/*:/app/pgv-display/build/libs/*
     ports:
       - "8888:8888"
     volumes:
