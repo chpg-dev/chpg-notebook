@@ -81,7 +81,7 @@ public class PGV {
                 <style>
                     __CSS_BUNDLE__
                 </style>
-                <div id="__CONTAINER_ID__" style="width: 100%; height: 600px; border: 1px solid #ccc; border-radius: 8px; background: #fafafa; resize: vertical; overflow: hidden;"></div>
+                <div id="__CONTAINER_ID__" style="width: 100%; max-width: 100%; height: 600px; border: 1px solid #ccc; border-radius: 8px; background: #fafafa; resize: vertical; overflow: hidden; box-sizing: border-box;"></div>
                 <script>
                     // Evaluate the IIFE bundle directly in the notebook context
                     __JS_BUNDLE__
