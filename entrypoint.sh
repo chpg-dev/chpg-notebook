@@ -27,5 +27,10 @@ if [ -f "/app/pgv/examples/pgv-exporter/pom.xml" ]; then
     cd /app
 fi
 
+echo "Building pgv-display..."
+cd /app/pgv-display
+./gradlew build -x test
+cd /app
+
 echo "Starting JupyterLab..."
 exec jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root
