@@ -1,0 +1,37 @@
+plugins {
+    id 'java'
+}
+
+group = 'dev.chpg.notebook'
+version = '0.1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java']
+        }
+    }
+}
+
+dependencies {
+    implementation 'io.github.spencerpark:jupyter-jvm-basekernel:2.3.0'
+
+    // Add pg dependencies
+    implementation fileTree(dir: '../pg/pg-api/build/libs', include: ['*.jar'])
+    implementation fileTree(dir: '../pg/pg-global/build/libs', include: ['*.jar'])
+    implementation fileTree(dir: '../pg/pg-multiverse/build/libs', include: ['*.jar'])
+    implementation fileTree(dir: '../pg/pg-io/build/libs', include: ['*.jar'])
+
+    // Add pgv-exporter dependency
+    implementation fileTree(dir: '../pgv/examples/pgv-exporter/target', include: ['*.jar'])
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
