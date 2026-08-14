@@ -3,7 +3,6 @@ package dev.chpg.notebook.ui;
 import dev.chpg.pg.api.Graph;
 import dev.chpg.pg.multiverse.universe.*;
 import dev.pgv.exporter.*;
-import io.github.spencerpark.ijava.runtime.Display;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.StandardCharsets;
@@ -25,8 +24,29 @@ public class PGV {
     }
 
     public static void show(Graph graph) {
+        // Generate graph HTML string
+        String finalHtml = toHTML(graph); 
+
+        // Dynamically invoke the IJava display method
         try {
-            // 1. Create the backend Universe graph
+            Class<?> displayClass = Class.forName("io.github.spencerpark.ijava.runtime.Display");
+            try {
+                // Attempt 1: The varargs signature -> display(Object, String[])
+                java.lang.reflect.Method displayVarargs = displayClass.getMethod("display", Object.class, String[].class);
+                displayVarargs.invoke(null, finalHtml, new String[]{"text/html"});
+            } catch (NoSuchMethodException e) {
+                // Attempt 2: Fallback to a strict two-argument signature -> display(Object, String)
+                java.lang.reflect.Method displayStrict = displayClass.getMethod("display", Object.class, String.class);
+                displayStrict.invoke(null, finalHtml, "text/html");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Could not hook into IJava Display environment.", e);
+        }
+    }
+
+    private static String toHTML(Graph graph) {
+        try {
+            // Create the backend Universe graph
             Universe universe = new Universe();
             int nodeId = universe.idGenerator().createNodeId();
             UniverseNode helloNode = new UniverseNode(universe, nodeId);
@@ -39,13 +59,13 @@ public class PGV {
 
             GraphSnapshot snapshot = new GraphSnapshot("hello-world-graph", 1, List.of(exportHelloNode), List.of());
 
-            // 3. Serialize JSON
+            // Serialize JSON
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             PgvExporter exporter = new PgvExporter();
             exporter.exportGraph(snapshot, baos);
             String jsonPayload = baos.toString(StandardCharsets.UTF_8);
 
-            // 4. Read the Vite Bundles and escape closing script tags
+            // Read the Vite Bundles and escape closing script tags
             String jsBundlePath = System.getProperty("pgv.bundle.js", "/app/pgv/dist/pgv-bundle.js");
             String jsBundle = Files.readString(Paths.get(jsBundlePath));
             jsBundle = jsBundle.replace("</script>", "<\\/script>");
@@ -56,8 +76,8 @@ public class PGV {
             // Generate a unique container ID so multiple cells don't clash
             String containerId = "pgv-viz-" + System.currentTimeMillis();
 
-            // 5. Build the direct HTML injection string using safe .replace() tokens
-            String directHtml = """
+            // Build the direct HTML injection string using safe .replace() tokens
+            return """
                 <style>
                     __CSS_BUNDLE__
                 </style>
@@ -94,10 +114,8 @@ public class PGV {
                 .replace("__CONTAINER_ID__", containerId)
                 .replace("__JS_BUNDLE__", jsBundle)
                 .replace("__JSON_PAYLOAD__", jsonPayload);
-
-            Display.display(directHtml, "text/html");
         } catch (IOException e) {
             throw new RuntimeException("Failed to load pgv bundles", e);
         }
-    }
+    } 
 }
