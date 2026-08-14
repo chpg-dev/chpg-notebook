@@ -25,3 +25,4 @@ replay_pid*
 
 data/
 .ipynb_checkpoints
+.pnpm-store
