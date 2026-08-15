@@ -1,4 +1,9 @@
 # chpg-notebook
+
+[![Launch Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/chpg-dev/chpg-notebook/main) [![Launch Binder Lab](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/chpg-dev/chpg-notebook/main?urlpath=lab)
+
+A [Binder](https://mybinder.org/) compatible repository to try out the chpg-notebook environment with just a web browser. Depending on if the docker image is already built, spawning the notebook may take some time and so please be patient with it.
+
 Support for Jupyter Notebook 
 
 ## Prerequisites
