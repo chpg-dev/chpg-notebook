@@ -14,4 +14,5 @@ services:
       - ./data:/home/jovyan/work/data
       - ./notebooks:/home/jovyan/work/notebooks
     working_dir: /home/jovyan/work
-    command: bash -c "./postBuild && jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --NotebookApp.token=''"
+    user: root
+    command: bash -c "./postBuild && jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token=''"
