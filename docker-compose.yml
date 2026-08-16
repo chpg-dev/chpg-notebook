@@ -4,12 +4,15 @@ services:
       context: .
       dockerfile: Dockerfile
     environment:
-      - IJAVA_CLASSPATH=/app/pg/pg-api/build/libs/*:/app/pg/pg-global/build/libs/*:/app/pg/pg-multiverse/build/libs/*:/app/pg/pg-io/build/libs/*:/app/pgv/examples/pgv-exporter/target/*:/app/pgv-display/build/libs/*
+      - IJAVA_CLASSPATH=/home/jovyan/work/pg/pg-api/build/libs/*:/home/jovyan/work/pg/pg-global/build/libs/*:/home/jovyan/work/pg/pg-multiverse/build/libs/*:/home/jovyan/work/pg/pg-io/build/libs/*:/home/jovyan/work/pgv/examples/pgv-exporter/target/*:/home/jovyan/work/pgv-display/build/libs/*
     ports:
       - "8888:8888"
     volumes:
-      # Mount the root directory to /app so the container can build pg and pgv submodules
-      - .:/app
+      # Mount the root directory to /home/jovyan/work so the container can build pg and pgv submodules
+      - .:/home/jovyan/work
       # Explicit mounts for data and notebooks (ensure they persist in local folders)
-      - ./data:/app/data
-      - ./notebooks:/app/notebooks
+      - ./data:/home/jovyan/work/data
+      - ./notebooks:/home/jovyan/work/notebooks
+    working_dir: /home/jovyan/work
+    user: root
+    command: bash -c "./postBuild && jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token=''"

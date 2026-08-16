@@ -139,9 +139,9 @@ public class PGV {
 
             // 2. Read Vite Bundles
             // (Adjust these paths if your Docker container mounts them elsewhere)
-            String jsBundle = Files.readString(Paths.get("/app/pgv/dist/pgv-bundle.js"))
+            String jsBundle = Files.readString(Paths.get("/home/jovyan/work/pgv/dist/pgv-bundle.js"))
                                    .replace("</script>", "<\\/script>");
-            String cssBundle = Files.readString(Paths.get("/app/pgv/dist/graph-core.css"));
+            String cssBundle = Files.readString(Paths.get("/home/jovyan/work/pgv/dist/graph-core.css"));
             
             String containerId = "pgv-viz-" + System.currentTimeMillis();
 

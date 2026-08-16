@@ -1,0 +1,38 @@
+#!/bin/bash
+set -e
+
+echo "Building pg..."
+if [ -f "./pg/gradlew" ]; then
+    cd ./pg
+    ./gradlew build -x test
+    cd ..
+else
+    echo "Warning: ./pg/gradlew not found. Did you initialize the submodules correctly?"
+fi
+
+echo "Building pgv..."
+if [ -f "./pgv/package.json" ]; then
+    cd ./pgv
+    CI=true pnpm install
+    CI=true pnpm vite build --config jupyter-notebook.config.ts
+    cd ..
+else
+    echo "Warning: ./pgv/package.json not found. Did you initialize the submodules correctly?"
+fi
+
+echo "Building pgv-exporter..."
+if [ -f "./pgv/examples/pgv-exporter/pom.xml" ]; then
+    cd ./pgv/examples/pgv-exporter
+    mvn package -DskipTests
+    # Go back to root, since we went down 3 directories
+    cd ../../..
+fi
+
+echo "Building pgv-display..."
+if [ -f "./pgv-display/gradlew" ]; then
+    cd ./pgv-display
+    ./gradlew build -x test
+    cd ..
+else
+    echo "Warning: ./pgv-display/gradlew not found."
+fi
